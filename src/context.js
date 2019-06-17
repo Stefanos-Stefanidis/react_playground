@@ -1,31 +1,47 @@
 import React, {Component} from 'react';
-
+import axios from 'axios';
 const Context = React.createContext();
 
-export class Provider extends Component {
-    state = {
-        contacts: [
-            {
-                id: 1,
-                name: 'Steve Steve',
-                email: 's.stevenidis+4@gmail.com',
-                phone: '44444',
-            },
-            {
-                id: 2,
-                name: 'Stef Stef',
-                email: 's.stevenidis+5@gmail.com',
-                phone: '55555',
-            },
-            {
-                id: 3,
-                name: 'Stefan Stefan',
-                email: 's.stevenidis+6@gmail.com',
-                phone: '6666',
-            },
-        ]
+const reducer = (state, action) =>{
+    switch (action.type) {
+        case 'DELETE_CONTACT':
+            return {
+                ...state,
+                contacts: state.contacts.filter(contact =>
+                    contact.id !== action.payload
+                )
+            }
+        case 'ADD_CONTACT':
+            return {
+                ...state,
+                contacts: [action.payload, ...state.contacts]
+            }
+        case 'UPDATE_CONTACT':
+            return {
+                ...state,
+                contacts: state.contacts.map(contact =>
+                    contact.id !== action.payload.id ? (contact = action.payload) : contact
+                )
+            }
+        default:
+            return state;
     }
-
+}
+export class Provider extends Component {
+    
+    state = {
+        contacts: [],
+        dispatch: action => {
+            this.setState(state => reducer(state, action))
+        }
+    }
+    async componentDidMount(){
+        const res = await axios
+            .get('https://jsonplaceholder.typicode.com/users');
+        this.setState({
+            contacts:res.data
+        })
+    }
     render() {
         return (
             <Context.Provider value={this.state}>

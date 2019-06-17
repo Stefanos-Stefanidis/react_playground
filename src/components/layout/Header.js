@@ -2,6 +2,8 @@
 import React from 'react'
 /*  Spippet:  import prop types  impt */
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom'
+
 
 const Header = (props) => {
     const {branding} = props
@@ -12,9 +14,15 @@ const Header = (props) => {
                 <div>
                     <ul className="navbar-nav mr-auto">
                         <li>
-                            <a href="/" className="nav-link">
+                            <Link to="/" className="nav-link">
                                 Home
-                            </a>
+                            </Link>
+                            <Link to="/about" className="nav-link">
+                                About
+                            </Link>
+                            <Link to="/contact/add" className="nav-link">
+                                Add
+                            </Link>
                         </li>
                     </ul>
                 </div>
@@ -33,9 +41,6 @@ Header.propTypes = {
 };
 
 /* styles */
-const headingStyle = {
-    color:'red',
-    fontSize:'60px'
-}
+
 
 export default Header
